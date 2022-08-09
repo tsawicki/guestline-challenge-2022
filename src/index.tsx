@@ -1,15 +1,35 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import GlobalCSS from "./GlobalCSS";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import reportWebVitals from "./reportWebVitals";
+import { CoverImage } from "./components/CoverImage";
+import { HotelsList } from "./components/HotelsList";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { ErrorMessage } from "./components/ErrorBoundary/ErrorMessage";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+      useErrorBoundary: true,
+    },
+  },
+});
+
 root.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <GlobalCSS />
+      <CoverImage />
+      <ErrorBoundary errorChildren={<ErrorMessage />}>
+        <HotelsList />
+      </ErrorBoundary>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
